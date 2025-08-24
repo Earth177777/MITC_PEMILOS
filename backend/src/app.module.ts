@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
 import { ElectionModule } from './election/election.module';
 import { CommonModule } from './common/common.module';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { CommonModule } from './common/common.module';
     CommonModule,
     DatabaseModule,
     ElectionModule,
+    HealthModule,
   ],
   controllers: [],
   providers: [],
