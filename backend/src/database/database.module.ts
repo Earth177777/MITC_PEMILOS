@@ -2,8 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Candidate } from '../entities/candidate.entity';
-// TODO: Create and import AuditLog entity
-// import { AuditLog } from '../entities/audit-log.entity';
+import { AuditLog } from '../entities/audit-log.entity';
 import { InitialMigration1692000000000 } from './migrations/1692000000000-InitialMigration';
 import { SeedInitialData1692000000001 } from './migrations/1692000000001-SeedInitialData';
 
