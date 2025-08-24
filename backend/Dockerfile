@@ -58,7 +58,6 @@ RUN npm ci --only=production && npm cache clean --force
 
 # Copy built application from build stage
 COPY --from=build /app/dist ./dist
-COPY --from=build /app/db ./db
 
 # Create database directory and set permissions
 RUN mkdir -p /app/db && chown -R nestjs:nodejs /app
