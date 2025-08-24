@@ -1,0 +1,138 @@
+version: '3.8'
+
+services:
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: election-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/sites-available:/etc/nginx/sites-available:ro
+      - ./ssl:/etc/nginx/ssl:ro
+      - ./logs/nginx:/var/log/nginx
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - election-network
+    healthcheck:
+      test: ["CMD", "nginx", "-t"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Backend service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: production
+    container_name: election-backend
+    restart: unless-stopped
+    expose:
+      - "3001"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_PATH=/app/db/electronic_voting_system.sqlite
+      - DATABASE_LOGGING=false
+      - PORT=3001
+    env_file:
+      - ./backend/.env.production
+    volumes:
+      - backend_data:/app/db
+      - backend_logs:/app/logs
+    networks:
+      - election-network
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3001/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+
+  # Frontend service
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: production
+      args:
+        - NODE_ENV=production
+    container_name: election-frontend
+    restart: unless-stopped
+    expose:
+      - "80"
+    env_file:
+      - ./frontend/.env.production
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - election-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.25'
+        reservations:
+          memory: 128M
+          cpus: '0.1'
+
+  # Database backup service
+  db-backup:
+    image: alpine:latest
+    container_name: election-db-backup
+    restart: unless-stopped
+    volumes:
+      - backend_data:/data:ro
+      - ./backups:/backups
+    command: >
+      sh -c '
+        while true; do
+          timestamp=$$(date +"%Y%m%d_%H%M%S")
+          cp /data/electronic_voting_system.sqlite /backups/backup_$$timestamp.sqlite
+          find /backups -name "backup_*.sqlite" -mtime +7 -delete
+          sleep 86400
+        done
+      '
+    networks:
+      - election-network
+
+volumes:
+  backend_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/election-system/data
+  backend_logs:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/election-system/logs
+
+networks:
+  election-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

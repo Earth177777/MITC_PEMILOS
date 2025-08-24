@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mitc Maitreyawira Innovation Tech Club - Electronic Voting System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'brand-primary': '#2563EB', // Maitreyawira Blue (blue-600)
+              'brand-primary-hover': '#1D4ED8', // Darker Blue (blue-700)
+              'brand-secondary': '#BE123C', // Deep Rose (rose-700)
+              'brand-secondary-hover': '#9F1239', // Darker Rose (rose-800)
+              'brand-accent': '#38BDF8', // Light Sky Blue (sky-400)
+              'base-100': '#FFFFFF', // White
+              'base-200': '#F3F4F6', // Light Gray (gray-100)
+              'base-300': '#E5E7EB', // Border Gray (gray-200)
+              'dark-100': '#1E293B', // Dark Text (slate-800)
+              'dark-200': '#475569', // Medium Text (slate-600)
+              'dark-300': '#64748B', // Light Text (slate-500)
+            },
+            fontFamily: {
+              sans: ['Poppins', 'sans-serif'],
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.5s ease-in-out',
+              'slide-up': 'slideUp 0.6s ease-out',
+              'marquee-ltr': 'marquee-ltr 30s linear infinite',
+              'shake': 'shake 0.5s ease-in-out',
+              'ping': 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite',
+            },
+            keyframes: {
+              fadeIn: {
+                '0%': { opacity: '0', transform: 'translateY(10px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              slideUp: {
+                '0%': { opacity: '0', transform: 'translateY(30px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              'marquee-ltr': {
+                '0%': { transform: 'translateX(-100%)' },
+                '100%': { transform: 'translateX(100%)' },
+              },
+              shake: {
+                '10%, 90%': { transform: 'translateX(-1px)' },
+                '20%, 80%': { transform: 'translateX(2px)' },
+                '30%, 50%, 70%': { transform: 'translateX(-4px)' },
+                '40%, 60%': { transform: 'translateX(4px)' },
+              },
+              ping: {
+                '75%, 100%': {
+                  transform: 'scale(2)',
+                  opacity: '0',
+                },
+              },
+            },
+          },
+        },
+        plugins: [
+            tailwind.plugin(function({ addUtilities }) {
+              addUtilities({
+                '.line-clamp-2': {
+                  'overflow': 'hidden',
+                  'display': '-webkit-box',
+                  '-webkit-box-orient': 'vertical',
+                  '-webkit-line-clamp': '2',
+                },
+                '.line-clamp-3': {
+                  'overflow': 'hidden',
+                  'display': '-webkit-box',
+                  '-webkit-box-orient': 'vertical',
+                  '-webkit-line-clamp': '3',
+                },
+                '.line-clamp-4': {
+                    'overflow': 'hidden',
+                    'display': '-webkit-box',
+                    '-webkit-box-orient': 'vertical',
+                    '-webkit-line-clamp': '4',
+                },
+              })
+            })
+        ],
+      }
+    </script>
+    <style>
+      body {
+        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body class="font-sans">
+    <div id="root"></div>
+    <script type="module" src="/src/index.tsx"></script>
+  </body>
+</html>

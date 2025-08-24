@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  # Development backend service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: development
+    environment:
+      - NODE_ENV=development
+      - DATABASE_PATH=/app/db/electronic_voting_system.sqlite
+      - DATABASE_LOGGING=true
+      - PORT=3001
+    volumes:
+      - ./backend:/app
+      - backend_dev_data:/app/db
+      - /app/node_modules
+    command: ["npm", "run", "start:dev"]
+
+  # Development frontend service
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+
+volumes:
+  backend_dev_data:
+    driver: local
