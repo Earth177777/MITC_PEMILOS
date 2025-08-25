@@ -42,7 +42,7 @@ This guide provides comprehensive instructions for deploying the SMA Maitreyawir
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-repo/sma-maitreyawira-voting-system.git
+   git clone https://github.com/MITC_PEMILOS/sma-maitreyawira-voting-system.git
    cd sma-maitreyawira-voting-system
    ```
 
