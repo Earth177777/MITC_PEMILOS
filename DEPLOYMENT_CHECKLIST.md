@@ -15,6 +15,10 @@
 - [ ] Domain name purchased and configured
 - [ ] DNS A record pointing to VPS IP
 - [ ] Email address for Let's Encrypt notifications
+- [ ] Domain accessible via browser
+- [ ] SSL certificate installed
+- [ ] HTTPS redirect working
+- [ ] SSL auto-renewal configured
 
 ### ✅ Local Preparation
 - [ ] Repository cloned to VPS
@@ -32,10 +36,14 @@
 
 ### ✅ SSL Configuration (If using domain)
 - [ ] Certbot installed
-- [ ] SSL certificates generated
-- [ ] Certificates copied to application directory
+- [ ] SSL certificates generated via Let's Encrypt
+- [ ] SSL certificates copied to `/opt/election-system/ssl/`
 - [ ] DH parameters generated
-- [ ] Auto-renewal configured
+- [ ] Nginx SSL configuration updated
+- [ ] Environment files updated for HTTPS
+- [ ] HTTPS redirect working
+- [ ] SSL auto-renewal configured
+- [ ] SSL certificate validity tested
 
 ### ✅ Application Configuration
 - [ ] Environment files configured:

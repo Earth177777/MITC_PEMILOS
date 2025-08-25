@@ -419,7 +419,6 @@ function LiveCountPage({ candidates: initialCandidates }: { candidates: Candidat
     // Calculate additional statistics
     const leadingCandidate = candidates[0];
     const averageVotes = totalVotes > 0 ? totalVotes / candidates.length : 0;
-    const votingTurnout = totalVotes; // Assuming this represents turnout
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 py-4 sm:py-6 lg:py-8">
