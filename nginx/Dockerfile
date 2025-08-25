@@ -1,23 +1,14 @@
 FROM nginx:1.25-alpine
 
-RUN apk add --no-cache \
+RUN apk update && \
+    apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
     certbot \
-    certbot-nginx \
+    py3-certbot-nginx \
     python3 \
-    && python3 -m ensurepip \
-    && pip3 install --no-cache-dir certbot-dns-digitalocean
-
-ENV PATH="/usr/bin:${PATH}"
-
-RUN apk update && apk add --no-cache \
-    certbot \
-    certbot-nginx \
-    && mkdir -p /etc/letsencrypt
+    && pip3 install --prefix=/usr certbot-dns-digitalocean
 
 ENV PATH="/usr/bin:$PATH"
 
-COPY nginx.conf /etc/nginx/nginx.conf
+# Copy SSL configuration
 COPY sites-available/ /etc/nginx/sites-available/
-
-RUN ln -s /etc/nginx/sites-available/election-system/* /etc/nginx/conf.d/ && \
-    ln -s /etc/nginx/sites-available/election-system-ssl/* /etc/nginx/conf.d/
+RUN ln -s /etc/nginx/sites-available/election-system-ssl /etc/nginx/sites-enabled/
