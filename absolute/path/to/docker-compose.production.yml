@@ -1,0 +1,4 @@
+services:
+  election-nginx:
+    volumes:
+      - ./nginx/sites-available/election-system:/etc/nginx/sites-available/election-system:ro
