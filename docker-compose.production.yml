@@ -118,17 +118,7 @@ services:
 
 volumes:
   backend_data:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: /opt/election-system/data
   backend_logs:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: /opt/election-system/logs
 
 networks:
   election-network:

@@ -37,6 +37,10 @@ FROM nginx:alpine AS production
 # Copy built application from build stage
 COPY --from=build /app/dist /usr/share/nginx/html
 
+# Create images directory and copy images
+RUN mkdir -p /usr/share/nginx/html/images
+COPY --from=build /app/public/images/* /usr/share/nginx/html/images/
+
 # Copy custom nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 

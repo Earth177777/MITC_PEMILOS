@@ -8,5 +8,10 @@ export default defineConfig({
     // Make the server accessible over the network
     host: '0.0.0.0',
     port: 5173
-  }
+  },
+  build: {
+    assetsDir: 'assets',
+    copyPublicDir: true
+  },
+  publicDir: 'public'
 })

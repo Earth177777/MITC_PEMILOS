@@ -1,14 +1,43 @@
-# HTTP server (SSL disabled temporarily)
+# HTTP server - redirect to HTTPS
 server {
     listen 80;
     server_name voting.yourdomain.com;
+    
+    # Redirect all HTTP traffic to HTTPS
+    return 301 https://$server_name$request_uri;
+}
 
-    # Security headers (HTTP only)
+# HTTPS server
+server {
+    listen 443 ssl http2;
+    server_name voting.yourdomain.com;
+
+    # SSL Configuration
+    ssl_certificate /etc/nginx/ssl/your-cert.pem;
+    ssl_certificate_key /etc/nginx/ssl/your-key.pem;
+    ssl_dhparam /etc/nginx/ssl/dhparam.pem;
+    
+    # SSL Security Settings
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA384;
+    ssl_prefer_server_ciphers off;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+    
+    # OCSP Stapling
+    ssl_stapling on;
+    ssl_stapling_verify on;
+    ssl_trusted_certificate /etc/nginx/ssl/your-cert.pem;
+    resolver 8.8.8.8 8.8.4.4 valid=300s;
+    resolver_timeout 5s;
+
+    # Security headers (HTTPS)
     add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' wss: https:; frame-ancestors 'none';" always;
     add_header X-Frame-Options "DENY" always;
     add_header X-Content-Type-Options "nosniff" always;
     add_header X-XSS-Protection "1; mode=block" always;
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
 
     # Root location - serve frontend
     location / {
@@ -59,7 +88,7 @@ server {
         proxy_buffers 8 4k;
     }
 
-    # WebSocket support for real-time features
+    # WebSocket support for real-time features (SSL)
     location /socket.io/ {
         proxy_pass http://backend:3001/socket.io/;
         proxy_http_version 1.1;

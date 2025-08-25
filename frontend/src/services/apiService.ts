@@ -8,7 +8,7 @@ class ApiService {
 
   constructor() {
     this.socket = io(SOCKET_URL, {
-      transports: ['websocket'],
+      transports: ['polling', 'websocket'],
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
     });
